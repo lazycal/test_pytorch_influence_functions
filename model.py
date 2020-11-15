@@ -19,9 +19,9 @@ class LogisticRegression(torch.nn.Module):
         preds = torch.sigmoid(logits)
 
         if train:
-            loss = -torch.mean(y * log_clip(preds) + (1 - y) * log_clip(1 - preds)) # + torch.norm(self.w, 2) * self.wd
+            loss = -torch.mean(y * torch.log(preds) + (1 - y) * torch.log(1 - preds)) + torch.sum(self.w*self.w) * self.wd / 2
         else:
-            loss = -torch.mean(y * log_clip(preds) + (1 - y) * log_clip(1 - preds))
+            loss = -torch.mean(y * torch.log(preds) + (1 - y) * torch.log(1 - preds)) + torch.sum(self.w*self.w) * self.wd / 2
 
         return loss
 

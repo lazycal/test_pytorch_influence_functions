@@ -19,6 +19,13 @@ from pytorch_influence_functions.influence_functions.influence_functions import 
     calc_influence_single,
 )
 
+from pytorch_influence_functions.influence_functions.utils import (
+    load_weights,
+    make_functional,
+    tensor_to_tuple,
+    parameters_to_vector,
+)
+
 
 EPOCH = 10
 BATCH_SIZE = 100
@@ -27,8 +34,10 @@ TEST_INDEX = 5
 WEIGHT_DECAY = 0.01
 OUTPUT_DIR = 'result'
 SAMPLE_NUM = 50 * 2
-RECURSION_DEPTH = 1000
+RECURSION_DEPTH = 5000
 R = 10
+SCALE = 25
+EXACT = False
 
 class TestLeaveOneOut(TestCase):
     def test_leave_one_out(self):
@@ -117,7 +126,7 @@ class TestLeaveOneOut(TestCase):
         #         print('[{}/{}] Estimated loss diff: {}'.format(i+1, train_sample_num, loss_diff_approx[i]))
 
         loss_diff_approx, _, _, _, = calc_influence_single(torch_model, train_loader, test_loader, test_id_num=0, gpu=1,
-                                    recursion_depth=RECURSION_DEPTH, r=R, damp=0)
+                                    recursion_depth=RECURSION_DEPTH, r=R, damp=0, scale=SCALE, exact=EXACT, batch_size=128)
         loss_diff_approx = - torch.FloatTensor(loss_diff_approx).cpu().numpy()
 
         # get high and low loss diff indice
