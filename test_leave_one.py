@@ -127,7 +127,7 @@ class TestLeaveOneOut(TestCase):
 
         loss_diff_approx, _, _, _, = calc_influence_single(torch_model, train_loader, test_loader, test_id_num=0, gpu=1,
                                     recursion_depth=RECURSION_DEPTH, r=R, damp=0, scale=SCALE, exact=EXACT, batch_size=128)
-        loss_diff_approx = - torch.FloatTensor(loss_diff_approx).cpu().numpy()
+        loss_diff_approx = torch.FloatTensor(loss_diff_approx).cpu().numpy()
 
         # get high and low loss diff indice
         sorted_indice = np.argsort(loss_diff_approx)
